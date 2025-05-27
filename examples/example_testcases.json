@@ -1,0 +1,22 @@
+[
+  {
+    "input": [1, 2],
+    "expected": 3
+  },
+  {
+    "input": [[1, 2, 3]],
+    "expected": 6
+  },
+  {
+    "input": ["hello", "world"],
+    "expected": "helloworld"
+  },
+  {
+    "input": {"a": 1, "b": 2},
+    "expected": 3
+  },
+  {
+    "input": ["apple", "banana"],
+    "expected": 2
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "description": "GraphNode test case",
+    "input": [{"GraphNode": [[1, [2, 3]], [2, [1]], [3, [1]]]}],
+    "expected": {"GraphNode": [[2, []]]}
+  },
+  {
+    "description": "Matrix test case",
+    "input": [{"Matrix": [[1, 2, 3], [4, 5, 6]]}],
+    "expected": {"Matrix": [[1, 4], [2, 5], [3, 6]]}
+  },
+  {
+    "description": "Interval test case", 
+    "input": [{"Interval": [2, 5]}],
+    "expected": {"Interval": [1, 6]}
+  },
+  {
+    "description": "Point test case",
+    "input": [{"Point": [3, 4]}],
+    "expected": {"Point": [5, 0]}
+  },
+  {
+    "description": "Point test case with origin",
+    "input": [{"Point": [0, 0]}],
+    "expected": {"Point": [0, 0]}
+  }
+]

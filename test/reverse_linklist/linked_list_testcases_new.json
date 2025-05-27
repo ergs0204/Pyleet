@@ -1,0 +1,14 @@
+[
+  {
+    "input": [{"ListNode": [1,2,3,4,5]}],
+    "expected": {"ListNode": [5,4,3,2,1]}
+  },
+  {
+    "input": [{"ListNode": [1,2]}],
+    "expected": {"ListNode": [2,1]}
+  },
+  {
+    "input": [{"ListNode": []}],
+    "expected": {"ListNode": []}
+  }
+]

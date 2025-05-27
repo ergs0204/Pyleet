@@ -1,0 +1,25 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="pyleet",
+    version="0.1.0",
+    description="Run and test your LeetCode Python solutions locally",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
+    author="ergs0204",
+    author_email="ergs0204@gmail.com",
+    url="https://github.com/ergs0204/pyleet",
+    packages=find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires=">=3.7",
+    entry_points={
+        "console_scripts": [
+            "pyleet=pyleet.__main__:main",  # Adjust to your CLI entry
+        ]
+    },
+    include_package_data=True,
+)
