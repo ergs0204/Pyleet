@@ -1,18 +1,76 @@
-# Using Custom Classes in Pyleet
+# Custom Classes Guide
 
-This guide shows you how to use custom classes other than TreeNode and ListNode in Pyleet's test framework.
+This guide shows you how to use custom classes in Pyleet's test framework, including both built-in classes and your own custom classes.
 
 ## Overview
 
 Pyleet supports any custom class through its extensible serialization system. You can register both deserializers (for input) and serializers (for output) for your own classes and use them in test cases with the format `{"ClassName": data}`.
 
 **Key Features:**
-- **No `val` attribute required** - Unlike TreeNode/ListNode, your custom classes don't need specific attributes
-- **Automatic method selection** - Pyleet intelligently chooses the right method based on input types
-- **Bidirectional serialization** - Both input deserialization and output serialization are supported
-- **Flexible class design** - Any class structure is supported as long as you provide the serialization functions
+- **🎯 Built-in ListNode and TreeNode** - Common LeetCode classes are provided out-of-the-box
+- **🔄 Three usage patterns** - Automatic fallback, explicit import, or custom override
+- **🧠 No `val` attribute required** - Your custom classes don't need specific attributes
+- **🔧 Automatic method selection** - Pyleet intelligently chooses the right method based on input types
+- **↔️ Bidirectional serialization** - Both input deserialization and output serialization are supported
+- **🎨 Flexible class design** - Any class structure is supported as long as you provide the serialization functions
 
-## Step-by-Step Process
+## Built-in Classes: ListNode and TreeNode
+
+Pyleet includes built-in `ListNode` and `TreeNode` classes. You don't need to define these common LeetCode data structures yourself.
+
+### Usage Patterns for Built-in Classes
+
+#### Pattern 1: Automatic Fallback (Zero Configuration)
+```python
+# No imports needed - Pyleet automatically provides the classes
+class Solution:
+    def reverseList(self, head):
+        """ListNode is automatically available"""
+        prev = None
+        current = head
+        while current:
+            next_temp = current.next
+            current.next = prev
+            prev = current
+            current = next_temp
+        return prev
+```
+
+#### Pattern 2: Explicit Import (Recommended)
+```python
+from pyleet import ListNode
+
+class Solution:
+    def mergeTwoLists(self, list1, list2):
+        """Explicit import for better code clarity"""
+        dummy = ListNode(0)
+        # ... implementation
+        return dummy.next
+```
+
+#### Pattern 3: Custom Override (Advanced)
+```python
+# Define your own to override built-in classes
+class ListNode:
+    def __init__(self, val=0, next=None, custom_attr=None):
+        self.val = val
+        self.next = next
+        self.custom_attr = custom_attr  # Your custom addition
+
+class Solution:
+    def customProcessor(self, head):
+        """Uses your custom ListNode implementation"""
+        # ... implementation
+```
+
+### Priority System
+1. **User-defined classes** (highest priority) - Your classes override built-in ones
+2. **Built-in classes** (fallback) - Used when you don't define your own
+3. **Error** (last resort) - If neither is available
+
+## Step-by-Step Process for Custom Classes
+
+**Note**: For `ListNode` and `TreeNode`, you can skip this entire process and use the built-in classes! This section is for other custom classes like `Point`, `Matrix`, `Interval`, etc.
 
 ### 1. Define Your Custom Class
 
@@ -29,6 +87,20 @@ class Point:
 
     def __repr__(self):  # Helpful for debugging
         return f"Point({self.x}, {self.y})"
+
+class Matrix:
+    def __init__(self, grid):
+        self.grid = grid
+        self.rows = len(grid)
+        self.cols = len(grid[0]) if grid else 0
+
+    def __eq__(self, other):
+        if not isinstance(other, Matrix):
+            return False
+        return self.grid == other.grid
+
+    def __repr__(self):
+        return f"Matrix({self.grid})"
 ```
 
 ### 2. Define Deserializer and Serializer Functions
@@ -271,7 +343,42 @@ register_deserializer("GraphNode", list_to_graphnode)
 
 ## Best Practices
 
-### 1. Always Implement `__eq__` Method
+### 1. Choose the Right Approach
+
+**Use Built-in Classes When:**
+- ✅ Working with standard `ListNode` or `TreeNode` problems
+- ✅ You want zero configuration and minimal boilerplate
+- ✅ Standard LeetCode behavior is sufficient
+
+**Use Custom Classes When:**
+- 🔧 You need additional attributes or methods
+- 🔧 Working with non-standard data structures (`Point`, `Matrix`, `Interval`, etc.)
+- 🔧 You need specific behavior that differs from LeetCode standards
+
+**Examples:**
+```python
+# ✅ Use built-in - simple and clean
+from pyleet import ListNode, TreeNode
+
+class Solution:
+    def reverseList(self, head):
+        # Standard ListNode behavior
+        pass
+
+# 🔧 Use custom - when you need more
+class ListNode:
+    def __init__(self, val=0, next=None, timestamp=None):
+        self.val = val
+        self.next = next
+        self.timestamp = timestamp  # Custom field
+
+class Solution:
+    def processTimestampedList(self, head):
+        # Custom behavior with timestamps
+        pass
+```
+
+### 2. Always Implement `__eq__` Method
 
 ```python
 def __eq__(self, other):
@@ -352,9 +459,54 @@ register_deserializer("P", some_function)
 register_serializer("Data", generic_function)
 ```
 
-## Complete Working Example
+## Complete Working Examples
 
-Here's a complete example you can run:
+### Example 1: Using Built-in Classes (Recommended for ListNode/TreeNode)
+
+```python
+# No imports needed for basic usage!
+# Or use explicit import for clarity:
+from pyleet import ListNode, TreeNode
+
+class Solution:
+    def reverseList(self, head):
+        """Reverse a linked list using built-in ListNode"""
+        prev = None
+        current = head
+        while current:
+            next_temp = current.next
+            current.next = prev
+            prev = current
+            current = next_temp
+        return prev
+
+    def invertTree(self, root):
+        """Invert a binary tree using built-in TreeNode"""
+        if not root:
+            return None
+        root.left, root.right = root.right, root.left
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+        return root
+```
+
+**Test cases for built-in classes:**
+```json
+[
+  {
+    "description": "Reverse linked list",
+    "input": [{"ListNode": [1, 2, 3, 4, 5]}],
+    "expected": {"ListNode": [5, 4, 3, 2, 1]}
+  },
+  {
+    "description": "Invert binary tree",
+    "input": [{"TreeNode": [4, 2, 7, 1, 3, 6, 9]}],
+    "expected": {"TreeNode": [4, 7, 2, 9, 6, 3, 1]}
+  }
+]
+```
+
+### Example 2: Using Custom Classes (For other data structures)
 
 ```python
 from pyleet import register_deserializer, register_serializer
@@ -417,19 +569,33 @@ pyleet your_solution.py --testcases point_testcases.json
 
 ## Key Points
 
-1. **No special attributes required** - Your classes don't need `val` or any specific attributes
-2. **Bidirectional serialization** - Register both deserializers and serializers for complete support
-3. **Automatic method selection** - Pyleet chooses the right method based on input types
-4. **Use concise format** - `{"ClassName": data}` in JSON test cases
-5. **Handle edge cases** - Both serializers and deserializers should handle None, empty, and invalid input
-6. **Implement comparison methods** - `__eq__` is essential for test validation
-7. **Descriptive naming** - Use clear names for methods and functions to enable automatic selection
+1. **🎯 Built-in classes available** - `ListNode` and `TreeNode` are provided out-of-the-box
+2. **🔄 Three usage patterns** - Automatic fallback, explicit import, or custom override
+3. **🧠 No special attributes required** - Your classes don't need `val` or any specific attributes
+4. **↔️ Bidirectional serialization** - Register both deserializers and serializers for complete support
+5. **🔧 Automatic method selection** - Pyleet chooses the right method based on input types
+6. **📝 Use concise format** - `{"ClassName": data}` in JSON test cases
+7. **🛡️ Handle edge cases** - Both serializers and deserializers should handle None, empty, and invalid input
+8. **⚖️ Implement comparison methods** - `__eq__` is essential for test validation
+9. **🏷️ Descriptive naming** - Use clear names for methods and functions to enable automatic selection
+
+## When to Use What
+
+| Scenario | Recommendation | Example |
+|----------|---------------|---------|
+| Standard ListNode problems | ✅ Use built-in classes | `from pyleet import ListNode` |
+| Standard TreeNode problems | ✅ Use built-in classes | `from pyleet import TreeNode` |
+| Custom data structures | 🔧 Define custom classes | `Point`, `Matrix`, `Interval` |
+| Need extra attributes | 🔧 Override built-in classes | `ListNode` with timestamps |
+| Zero configuration | 🎯 Automatic fallback | No imports needed |
 
 ## Recent Improvements
 
+- 🎯 **NEW: Built-in ListNode and TreeNode classes** - Zero configuration for common problems
+- 🔄 **NEW: Three usage patterns** - Maximum flexibility for different use cases
 - ✅ **Fixed serialization errors** - Custom classes no longer need `val` attributes
 - ✅ **Enhanced method selection** - Automatic selection based on input types
 - ✅ **Bidirectional support** - Both input and output serialization
 - ✅ **Robust comparison** - Multiple fallback strategies for output comparison
 
-This system makes Pyleet extremely flexible for testing any type of algorithm that uses custom data structures!
+This system makes Pyleet extremely flexible for testing any type of algorithm, from simple built-in data structures to complex custom classes!
