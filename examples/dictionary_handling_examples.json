@@ -1,18 +1,15 @@
 [
   {
     "description": "Single-key dict with registered deserializer",
-    "input": [{"ListNode": [1, 2, 3]}],
-    "expected": {"ListNode": [3, 2, 1]}
+    "input": [{"ListNode": [1, 2, 3]}]
   },
   {
     "description": "Single-key dict with unregistered key (treated as regular dict)",
-    "input": [{"CustomClass": [1, 2, 3]}],
-    "expected": {"result": "processed"}
+    "input": [{"CustomClass": [1, 2, 3]}]
   },
   {
     "description": "Multi-key regular dictionary (always treated as regular dict)",
-    "input": [{"key": "value", "count": 5}],
-    "expected": {"processed": true}
+    "input": [{"key": "value", "count": 5}]
   },
   {
     "description": "Mixed nested structure",
@@ -21,8 +18,7 @@
         "nodes": [{"ListNode": [1, 2]}, {"ListNode": [3, 4]}],
         "metadata": {"count": 2, "type": "linked_list"}
       }
-    ],
-    "expected": {"ListNode": [1, 2, 3, 4]}
+    ]
   },
   {
     "description": "List with mixed dictionary types",
@@ -32,7 +28,6 @@
         {"key": "value"},
         {"TreeNode": [5]}
       ]
-    ],
-    "expected": {"processed": "mixed_types"}
+    ]
   }
 ]

@@ -1,5 +1,8 @@
 # Pyleet
 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![License](https://img.shields.io/github/license/ergs0204/Pyleet)
+
 Pyleet is a Python tool that allows you to **run and test your LeetCode Python solutions locally** with minimal modification. It bridges the gap between LeetCode's online environment and local development, making it easier to debug and verify your solutions offline.
 
 ---
@@ -9,10 +12,12 @@ Pyleet is a Python tool that allows you to **run and test your LeetCode Python s
 - Run LeetCode Python solutions locally without modifying your original code
 - Provide test cases in a separate file (`.txt` or `.json`)
 - Simple CLI command: `pyleet solution.py --testcases cases.txt`
-- **Enhanced custom class support** - Any class structure supported, no `val` attribute required
-- **Flexible method selection** - Automatic selection based on input types OR explicit method specification
-- **Bidirectional serialization** - Both input deserialization and output serialization
-- Supports common LeetCode data structures (lists, integers, strings, TreeNode, ListNode)
+- **🎯 Built-in ListNode and TreeNode classes** - No need to define common LeetCode classes yourself!
+- **🔄 Three usage patterns** - Automatic fallback, explicit import, or custom override
+- **🧠 Flexible method selection** - Automatic selection based on input types OR explicit method specification
+- **↔️ Bidirectional serialization** - Both input deserialization and output serialization
+- **🔧 Enhanced custom class support** - Any class structure supported, no `val` attribute required
+- Supports all common LeetCode data structures (lists, integers, strings, TreeNode, ListNode, and more)
 - Easy installation via `pip` or `setup.py`
 - Robust error handling and comparison strategies
 
@@ -77,6 +82,109 @@ Each test case consists of:
 - **Input arguments** (e.g., `[1,2,3]`)
 - **Expected output** (e.g., `6`)
 - Separated by a blank line
+
+---
+
+## Built-in ListNode and TreeNode Classes
+
+🎉 **New Feature**: Pyleet now includes built-in `ListNode` and `TreeNode` classes, so you don't need to define these common LeetCode data structures yourself!
+
+### Three Usage Patterns
+
+#### 1. **Automatic Fallback** (Zero Configuration)
+Just write your solution - Pyleet automatically provides the classes:
+
+```python
+# No imports needed!
+class Solution:
+    def reverseList(self, head):
+        """Reverse a linked list - ListNode is automatically available"""
+        prev = None
+        current = head
+        while current:
+            next_temp = current.next
+            current.next = prev
+            prev = current
+            current = next_temp
+        return prev
+
+    def invertTree(self, root):
+        """Invert a binary tree - TreeNode is automatically available"""
+        if not root:
+            return None
+        root.left, root.right = root.right, root.left
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+        return root
+```
+
+#### 2. **Explicit Import** (Recommended)
+Import the classes for better code clarity:
+
+```python
+from pyleet import ListNode, TreeNode
+
+class Solution:
+    def mergeTwoLists(self, list1, list2):
+        """Merge two sorted linked lists"""
+        dummy = ListNode(0)
+        current = dummy
+
+        while list1 and list2:
+            if list1.val <= list2.val:
+                current.next = list1
+                list1 = list1.next
+            else:
+                current.next = list2
+                list2 = list2.next
+            current = current.next
+
+        current.next = list1 or list2
+        return dummy.next
+```
+
+#### 3. **Custom Override** (Advanced)
+Define your own classes to override the built-in ones:
+
+```python
+# Your custom implementation takes precedence
+class ListNode:
+    def __init__(self, val=0, next=None, custom_attr=None):
+        self.val = val
+        self.next = next
+        self.custom_attr = custom_attr  # Your custom attribute
+
+class Solution:
+    def customListProcessor(self, head):
+        """Uses your custom ListNode implementation"""
+        # Your implementation here
+        pass
+```
+
+### Test Cases Work Seamlessly
+
+```json
+[
+  {
+    "description": "Reverse linked list",
+    "input": [{"ListNode": [1, 2, 3, 4, 5]}],
+    "expected": {"ListNode": [5, 4, 3, 2, 1]}
+  },
+  {
+    "description": "Invert binary tree",
+    "input": [{"TreeNode": [4, 2, 7, 1, 3, 6, 9]}],
+    "expected": {"TreeNode": [4, 7, 2, 9, 6, 3, 1]}
+  }
+]
+```
+
+### Key Benefits
+
+- ✅ **Zero boilerplate** - No need to copy-paste class definitions
+- ✅ **Backward compatible** - Existing code continues to work
+- ✅ **Flexible** - Use built-in classes or define your own
+- ✅ **Standard compliant** - Built-in classes match LeetCode specifications
+- ✅ **Automatic serialization** - Input/output conversion handled automatically
 
 ---
 
@@ -167,6 +275,8 @@ Error: Method 'nonExistentMethod' not found. Available methods: ['twoSum', 'thre
 
 ## Recent Improvements
 
+- 🎯 **NEW: Built-in ListNode and TreeNode classes** - Zero configuration needed for common LeetCode problems
+- 🔄 **NEW: Three usage patterns** - Automatic fallback, explicit import, or custom override
 - ✅ **Enhanced custom class support** - Any class structure now supported
 - ✅ **Fixed serialization errors** - No more `val` attribute requirements
 - ✅ **Flexible method selection** - Both automatic selection and explicit method specification via `--method` parameter
@@ -178,31 +288,28 @@ Error: Method 'nonExistentMethod' not found. Available methods: ['twoSum', 'thre
 
 - Optional feature to **fetch test cases automatically from LeetCode**
 - Integration with testing frameworks (pytest, unittest)
+- Handle print correctly. Currently print everything before showing test result.
+- Run solution file as script (eg: adding `pyleet.run()` in the end).
+- Support for more data structures.
+- Run tests in parallel.
+- Record running time.
 - Performance optimizations for large test suites
 
 ---
 
-## Using Custom Classes (e.g., ListNode, TreeNode, or your own)
+## Using Custom Classes
 
 Pyleet supports any custom data structure through its enhanced serialization system. **No special attributes like `val` are required** - your classes can have any structure you need.
 
-### 1. Include your class definitions inside your solution file
+### Built-in Classes vs Custom Classes
 
-Define your custom classes with any attributes you need:
+**✅ For ListNode and TreeNode**: Use Pyleet's built-in classes (see [Built-in Classes section](#built-in-listnode-and-treenode-classes) above) - no setup required!
+
+**🔧 For other custom classes**: Follow the steps below to register your own classes.
+
+### 1. Define your custom classes
 
 ```python
-# Traditional LeetCode classes
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-
 # Your own custom classes - any structure works!
 class Point:
     def __init__(self, x=0, y=0):
@@ -214,6 +321,19 @@ class Matrix:
         self.grid = grid
         self.rows = len(grid)
         self.cols = len(grid[0]) if grid else 0
+
+class Interval:
+    def __init__(self, start=0, end=0):
+        self.start = start
+        self.end = end
+
+# Note: ListNode and TreeNode are built-in - no need to define them!
+# But you can still override them if you need custom behavior:
+class ListNode:
+    def __init__(self, val=0, next=None, custom_field=None):
+        self.val = val
+        self.next = next
+        self.custom_field = custom_field  # Your custom addition
 ```
 
 ### 2. Write deserializer and serializer functions

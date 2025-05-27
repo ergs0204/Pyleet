@@ -1,0 +1,7 @@
+[
+  {
+    "description": "Matrix test case",
+    "input": [{"Matrix": [[1, 2, 3], [4, 5, 6]]}],
+    "expected": {"Matrix": [[1, 4], [2, 5], [3, 6]]}
+  }
+]

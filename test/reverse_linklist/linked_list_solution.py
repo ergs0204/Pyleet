@@ -2,6 +2,7 @@
 Example solution for testing the new serialization format with linked lists.
 """
 
+from pyleet import ListNode
 
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -22,13 +23,14 @@ Example solution for testing the new serialization format with linked lists.
 
 
 class Solution:
-    def reverseList(self, head):
+    def reverseList(self, head: ListNode):
         """
         Reverse a linked list.
         """
         prev = None
         current = head
         while current:
+            # print(current.val)
             next_temp = current.next
             current.next = prev
             prev = current
