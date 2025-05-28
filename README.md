@@ -23,13 +23,23 @@ Pyleet is a Python tool that allows you to **run and test your LeetCode Python s
 
 ---
 
-## Installation
-
-<!-- ### Using pip (after packaging/uploading)
+## 🚀 Quickstart
 
 ```bash
-pip install pyleet
-``` -->
+git clone https://github.com/yourusername/pyleet.git
+cd pyleet
+pip install -e .
+
+pyleet solution.py --testcases cases.txt
+```
+✅ Done. Now your local LeetCode environment is ready.
+
+---
+## Installation
+
+### Using pip (coming soon)
+We'll update this section once Pyleet is available on PyPI.
+
 
 ### From source (development mode)
 
@@ -68,7 +78,7 @@ pyleet solution.py --testcases cases.txt -m threeSum
 
 ### Example test case file format
 
-Plain text format (initial version):
+#### Plain text format (initial version):
 
 ```
 [1,2,3]
@@ -83,100 +93,54 @@ Each test case consists of:
 - **Expected output** (e.g., `6`)
 - Separated by a blank line
 
----
-
-## Built-in ListNode and TreeNode Classes
-
-🎉 **New Feature**: Pyleet now includes built-in `ListNode` and `TreeNode` classes, so you don't need to define these common LeetCode data structures yourself!
-
-### Three Usage Patterns
-
-#### 1. **Automatic Fallback** (Zero Configuration)
-Just write your solution - Pyleet automatically provides the classes:
-
-```python
-# No imports needed!
-class Solution:
-    def reverseList(self, head):
-        """Reverse a linked list - ListNode is automatically available"""
-        prev = None
-        current = head
-        while current:
-            next_temp = current.next
-            current.next = prev
-            prev = current
-            current = next_temp
-        return prev
-
-    def invertTree(self, root):
-        """Invert a binary tree - TreeNode is automatically available"""
-        if not root:
-            return None
-        root.left, root.right = root.right, root.left
-        self.invertTree(root.left)
-        self.invertTree(root.right)
-        return root
-```
-
-#### 2. **Explicit Import** (Recommended)
-Import the classes for better code clarity:
-
-```python
-from pyleet import ListNode, TreeNode
-
-class Solution:
-    def mergeTwoLists(self, list1, list2):
-        """Merge two sorted linked lists"""
-        dummy = ListNode(0)
-        current = dummy
-
-        while list1 and list2:
-            if list1.val <= list2.val:
-                current.next = list1
-                list1 = list1.next
-            else:
-                current.next = list2
-                list2 = list2.next
-            current = current.next
-
-        current.next = list1 or list2
-        return dummy.next
-```
-
-#### 3. **Custom Override** (Advanced)
-Define your own classes to override the built-in ones:
-
-```python
-# Your custom implementation takes precedence
-class ListNode:
-    def __init__(self, val=0, next=None, custom_attr=None):
-        self.val = val
-        self.next = next
-        self.custom_attr = custom_attr  # Your custom attribute
-
-class Solution:
-    def customListProcessor(self, head):
-        """Uses your custom ListNode implementation"""
-        # Your implementation here
-        pass
-```
-
-### Test Cases Work Seamlessly
+#### JSON format (recommended):
 
 ```json
 [
   {
-    "description": "Reverse linked list",
-    "input": [{"ListNode": [1, 2, 3, 4, 5]}],
-    "expected": {"ListNode": [5, 4, 3, 2, 1]}
+    "input": [[2, 7, 11, 15], 9],
+    "expected": [0, 1]
   },
   {
-    "description": "Invert binary tree",
-    "input": [{"TreeNode": [4, 2, 7, 1, 3, 6, 9]}],
-    "expected": {"TreeNode": [4, 7, 2, 9, 6, 3, 1]}
+    "input": [[3, 2, 4], 6],
+    "expected": [1, 2]
+  },
+  {
+    "input": [[3, 3], 6],
+    "expected": [0, 1]
   }
 ]
 ```
+
+**JSON format features:**
+- **Structured data**: Each test case is a JSON object with `input` and `expected` fields
+- **Multiple arguments**: Input can be a list of arguments: `"input": [arg1, arg2, arg3]`
+- **Single argument**: For single arguments, wrap in a list: `"input": [arg1]`
+- **Complex data types**: Supports nested structures, objects, and custom classes
+- **Optional descriptions**: Add `"description"` field for test case documentation
+
+**Advanced JSON example with TreeNode:**
+
+```json
+[
+  {
+    "description": "Invert binary tree - simple case",
+    "input": [{"TreeNode": [4, 2, 7, 1, 3, 6, 9]}],
+    "expected": {"TreeNode": [4, 7, 2, 9, 6, 3, 1]}
+  },
+  {
+    "description": "Single node tree",
+    "input": [{"TreeNode": [1]}],
+    "expected": {"TreeNode": [1]}
+  }
+]
+```
+
+---
+
+## Built-in ListNode and TreeNode Classes
+
+Pyleet includes built-in `ListNode` and `TreeNode` classes for common LeetCode data structures. For detailed information about using these classes and custom class support, please see the [Custom Classes Guide](docs/custom_classes_guide.md).
 
 ### Key Benefits
 
@@ -303,7 +267,16 @@ Please see the [Custom Classes Guide](docs/custom_classes_guide.md).
 - Performance optimizations for large test suites
 
 ---
+## 🤝 Contributing
+
+Contributions are welcome! Please open issues or pull requests.
+
+1. Fork the repo
+2. Create a feature branch
+3. Commit your changes with clear messages
+4. Push and open a PR.
+---
 
 ## License
 
-MIT License
+[MIT License](LICENSE)
