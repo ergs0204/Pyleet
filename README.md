@@ -45,7 +45,7 @@ We'll update this section once Pyleet is available on PyPI.
 ### From source (development mode)
 
 ```bash
-git clone https://github.com/yourusername/pyleet.git
+git clone https://github.com/ergs0204/pyleet.git
 cd pyleet
 pip install -e .
 ```
