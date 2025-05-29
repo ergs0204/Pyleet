@@ -5,6 +5,8 @@ with provided test cases.
 
 import importlib.util
 import sys
+import io
+import contextlib
 from pyleet.datastructures import set_user_module, serialize_object
 
 
@@ -59,24 +61,34 @@ def run_solution(solution_path, test_cases, target_method=None):
     results = []
     # The test_cases list now contains already deserialized input_args and expected values
     for deserialized_input_args, deserialized_expected in test_cases:
+        # Capture print output for this specific test case
+        print_capture = io.StringIO()
+
         try:
             # Determine which method to call based on target method or input types
             solution_func = _select_solution_method(
                 solution_methods, deserialized_input_args, target_method)
 
-            # The runner now receives fully formed objects
-            actual = solution_func(*deserialized_input_args)
+            # Capture print statements during solution execution
+            with contextlib.redirect_stdout(print_capture):
+                # The runner now receives fully formed objects
+                actual = solution_func(*deserialized_input_args)
+
             passed = _compare_outputs(actual, deserialized_expected)
         except Exception as e:
             actual = f"Error: {e}"
             passed = False
+
+        # Get captured print output
+        print_output = print_capture.getvalue()
 
         results.append({
             "input": deserialized_input_args,  # Store the deserialized input for reporting
             # Store the deserialized expected for reporting
             "expected": deserialized_expected,
             "actual": actual,
-            "passed": passed
+            "passed": passed,
+            "print_output": print_output  # Store captured print statements
         })
 
     return results

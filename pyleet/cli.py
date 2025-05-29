@@ -57,6 +57,14 @@ def main():
         print(f"  Input: {result['input']}")
         print(f"  Expected: {result['expected']}")
         print(f"  Actual: {result['actual']}")
+
+        # Display captured print output if any
+        if result.get("print_output") and result["print_output"].strip():
+            print(f"  Print Output:")
+            # Indent each line of print output for clear association
+            for line in result["print_output"].rstrip('\n').split('\n'):
+                print(f"    {line}")
+
         print()
 
     total = len(results)

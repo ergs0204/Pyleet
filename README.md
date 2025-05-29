@@ -7,20 +7,17 @@
 Pyleet is a Python tool that allows you to **run and test your LeetCode Python solutions locally** with minimal modification. It bridges the gap between LeetCode's online environment and local development, making it easier to debug and verify your solutions offline.
 
 ---
-
 ## Features
 
-- Run LeetCode Python solutions locally without modifying your original code
-- Provide test cases in a separate file (`.txt` or `.json`)
-- Simple CLI command: `pyleet solution.py --testcases cases.txt`
-- **Built-in ListNode and TreeNode classes** - No need to define common LeetCode classes yourself!
-- **Three usage patterns** - Automatic fallback, explicit import, or custom override
-- **Flexible method selection** - Automatic selection based on input types OR explicit method specification
-- **↔Bidirectional serialization** - Both input deserialization and output serialization
-- **Enhanced custom class support** - Any class structure supported, no `val` attribute required
-- Supports all common LeetCode data structures (lists, integers, strings, TreeNode, ListNode, and more)
-- Easy installation via `pip` (coming soon) or `setup.py`
-- Robust error handling and comparison strategies
+- **Local Testing**: Run LeetCode Python solutions locally without modifying code.
+- **Test Case Flexibility**: Support for `.txt` and `.json` test case files.
+- **Intuitive CLI**: Run tests easily with commands like `pyleet solution.py --testcases cases.txt`.
+- - **Smart Method Detection**: Automatically selects methods based on input types or allows explicit selection with `--method`.
+- **Built-in Data Structures**: Includes `ListNode` and `TreeNode` with automatic serialization, eliminating boilerplate code.
+- **Customizable Execution**: Choose automatic fallback, explicit imports, or custom class overrides for flexible usage.
+- **Broad Data Support**: Seamlessly handles lists, integers, strings, and custom classes with bidirectional serialization.
+- **Clear Error Reporting**: Provides detailed feedback and comparison for accurate test results.
+- **Debugging Support**: Displays `print()` output from solutions in test results for easier debugging.
 
 ---
 ## Installation
@@ -132,6 +129,8 @@ Each test case in text format follows the same structure:
 - Calls your solution method with the inputs
 - Compares the output to the expected result
 - Reports pass/fail status for each test case
+- Any `print()` output from your solution will be shown in  test result, helping with step-by-step debugging
+
 
 ---
 
@@ -246,7 +245,6 @@ Pyleet allows full support for custom data types and complex class structures. Y
 
 - Optional feature to **fetch test cases automatically from LeetCode**
 - Integration with testing frameworks (pytest, unittest)
-- Handle print correctly. Currently print everything before showing test result.
 - Run solution file as script (eg: adding `pyleet.run()` in the end).
 - Support for more data structures.
 - Run tests in parallel.
