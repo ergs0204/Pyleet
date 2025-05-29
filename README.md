@@ -12,7 +12,7 @@ Pyleet is a Python tool that allows you to **run and test your LeetCode Python s
 - **Local Testing**: Run LeetCode Python solutions locally without modifying code.
 - **Test Case Flexibility**: Support for `.txt` and `.json` test case files.
 - **Intuitive CLI**: Run tests easily with commands like `pyleet solution.py --testcases cases.txt`.
-- - **Smart Method Detection**: Automatically selects methods based on input types or allows explicit selection with `--method`.
+- **Smart Method Detection**: Automatically selects methods based on input types or allows explicit selection with `--method`.
 - **Built-in Data Structures**: Includes `ListNode` and `TreeNode` with automatic serialization, eliminating boilerplate code.
 - **Customizable Execution**: Choose automatic fallback, explicit imports, or custom class overrides for flexible usage.
 - **Broad Data Support**: Seamlessly handles lists, integers, strings, and custom classes with bidirectional serialization.
