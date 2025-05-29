@@ -13,34 +13,20 @@ Pyleet is a Python tool that allows you to **run and test your LeetCode Python s
 - Run LeetCode Python solutions locally without modifying your original code
 - Provide test cases in a separate file (`.txt` or `.json`)
 - Simple CLI command: `pyleet solution.py --testcases cases.txt`
-- **🎯 Built-in ListNode and TreeNode classes** - No need to define common LeetCode classes yourself!
-- **🔄 Three usage patterns** - Automatic fallback, explicit import, or custom override
-- **🧠 Flexible method selection** - Automatic selection based on input types OR explicit method specification
-- **↔️ Bidirectional serialization** - Both input deserialization and output serialization
-- **🔧 Enhanced custom class support** - Any class structure supported, no `val` attribute required
+- **Built-in ListNode and TreeNode classes** - No need to define common LeetCode classes yourself!
+- **Three usage patterns** - Automatic fallback, explicit import, or custom override
+- **Flexible method selection** - Automatic selection based on input types OR explicit method specification
+- **↔Bidirectional serialization** - Both input deserialization and output serialization
+- **Enhanced custom class support** - Any class structure supported, no `val` attribute required
 - Supports all common LeetCode data structures (lists, integers, strings, TreeNode, ListNode, and more)
-- Easy installation via `pip` or `setup.py`
+- Easy installation via `pip` (coming soon) or `setup.py`
 - Robust error handling and comparison strategies
-
----
-
-## 🚀 Quickstart
-
-```bash
-git clone https://github.com/yourusername/pyleet.git
-cd pyleet
-pip install -e .
-
-pyleet solution.py --testcases cases.txt
-```
-✅ Done. Now your local LeetCode environment is ready.
 
 ---
 ## Installation
 
 ### Using pip (coming soon)
 We'll update this section once Pyleet is available on PyPI.
-
 
 ### From source (development mode)
 
@@ -62,6 +48,8 @@ Prepare a **test case file** (e.g., `cases.txt`) containing your test inputs and
 
 ```bash
 pyleet solution.py --testcases cases.txt
+# or using the shorthand
+pyleet solution.py -t cases.txt
 ```
 
 ### Advanced usage with method selection
@@ -79,20 +67,17 @@ pyleet solution.py --testcases cases.txt -m threeSum
 
 ### Example test case file format
 
-#### Plain text format (initial version):
+#### Text format:
 
 ```
-[1,2,3]
-6
-
-[4,5,6]
-15
+(([2, 7, 11, 15], 9), [0, 1])
+(([3, 2, 4], 6), [1, 2])
+(([3, 3], 6), [0, 1])
 ```
 
-Each test case consists of:
-- **Input arguments** (e.g., `[1,2,3]`)
-- **Expected output** (e.g., `6`)
-- Separated by a blank line
+Each test case in text format follows the same structure:
+- Input arguments in parentheses
+- Expected output after a comma
 
 #### JSON format (recommended):
 
@@ -113,14 +98,7 @@ Each test case consists of:
 ]
 ```
 
-**JSON format features:**
-- **Structured data**: Each test case is a JSON object with `input` and `expected` fields
-- **Multiple arguments**: Input can be a list of arguments: `"input": [arg1, arg2, arg3]`
-- **Single argument**: For single arguments, wrap in a list: `"input": [arg1]`
-- **Complex data types**: Supports nested structures, objects, and custom classes
-- **Optional descriptions**: Add `"description"` field for test case documentation
-
-**Advanced JSON example with TreeNode:**
+#### Advanced JSON example with TreeNode:
 
 ```json
 [
@@ -137,18 +115,12 @@ Each test case consists of:
 ]
 ```
 
----
-
-## Built-in ListNode and TreeNode Classes
-
-Pyleet includes built-in `ListNode` and `TreeNode` classes for common LeetCode data structures. For detailed information about using these classes and custom class support, please see the [Custom Classes Guide](docs/custom_classes_guide.md).
-
-### Key Benefits
-
-- ✅ **Zero boilerplate** - No need to copy-paste class definitions
-- ✅ **Flexible** - Use built-in classes or define your own
-- ✅ **Standard compliant** - Built-in classes match LeetCode specifications
-- ✅ **Automatic serialization** - Input/output conversion handled automatically
+**JSON format features:**
+- **Structured data**: Each test case is a JSON object with `input` and `expected` fields
+- **Multiple arguments**: Input can be a list of arguments: `"input": [arg1, arg2, arg3]`
+- **Single argument**: For single arguments, wrap in a list: `"input": [arg1]`
+- **Complex data types**: Supports nested structures, objects, and custom classes
+- **Optional descriptions**: Add `"description"` field for test case documentation
 
 ---
 
@@ -198,11 +170,6 @@ class Solution:
         """LeetCode Problem 15: Three Sum"""
         # Implementation here
         pass
-
-    def maxSubArray(self, nums):
-        """LeetCode Problem 53: Maximum Subarray"""
-        # Implementation here
-        pass
 ```
 
 **Testing different methods:**
@@ -233,15 +200,34 @@ Error: Method 'nonExistentMethod' not found. Available methods: ['twoSum', 'thre
 
 ---
 
-## Custom Classes Support
+## Built-in and Custom Class Support
 
-For detailed information about using custom classes with Pyleet, including:
-- How to define and register custom classes
-- Serialization and deserialization
-- Method selection with custom classes
-- Best practices and examples
+Pyleet supports both **built-in** and **custom** data structures commonly used in LeetCode problems, such as `ListNode`, `TreeNode`, or your own custom classes like `Point` or `Matrix`.
 
-Please see the [Custom Classes Guide](docs/custom_classes_guide.md).
+### Built-in Support for `ListNode` and `TreeNode`
+
+Pyleet includes built-in `ListNode` and `TreeNode` classes that match LeetCode specifications.
+
+#### Key Benefits
+
+* ✅ **Zero boilerplate** – No need to copy-paste class definitions into your solution
+* ✅ **Flexible** – Use built-in classes or override with your own if needed
+* ✅ **Standard compliant** – Compatible with LeetCode's input/output formats
+* ✅ **Automatic serialization** – Input/output conversion is handled seamlessly
+
+---
+
+### Custom Class Support
+
+Pyleet allows full support for custom data types and complex class structures. You can:
+
+* Define and register your own classes
+* Create custom serializers and deserializers
+* Use automatic or explicit method selection with type-based heuristics
+* Build reusable and maintainable test cases using JSON-based formats
+
+**For full details**, including setup examples and best practices, see the [Custom Classes Guide](docs/custom_classes_guide.md).
+
 
 ---
 

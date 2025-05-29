@@ -1,10 +1,11 @@
 from setuptools import setup, find_packages
+from pathlib import Path
 
 setup(
     name="pyleet",
     version="0.1.0",
     description="Run and test your LeetCode Python solutions locally",
-    long_description=open("README.md").read(),
+    long_description=Path("README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
     author="ergs0204",
     author_email="ergs0204@gmail.com",
