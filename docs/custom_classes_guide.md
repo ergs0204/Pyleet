@@ -225,7 +225,7 @@ def custom_class_to_list(obj):
 
 ## Complete Working Examples
 
-### [Example 1](examples/builtin_classes/treenode_example.py): Using Built-in Classes (Recommended for ListNode/TreeNode)
+### Example 1: Using Built-in Classes (Recommended for ListNode/TreeNode)
 
 ```python
 # No imports needed for basic usage!
