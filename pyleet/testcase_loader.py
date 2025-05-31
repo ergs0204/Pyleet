@@ -89,6 +89,51 @@ def _deserialize_recursive(item):
         return item
 
 
+def process_test_cases(testcases):
+    """
+    Process test cases from in-memory data, applying deserialization.
+
+    Args:
+        testcases (list): List of test case tuples, dicts, or lists.
+
+    Returns:
+        list of tuples: Each tuple contains (input_args, expected_output).
+    """
+    if not isinstance(testcases, list):
+        raise ValueError("Test cases must be provided as a list")
+
+    cases = []
+    for entry in testcases:
+        if isinstance(entry, tuple) and len(entry) == 2:
+            # Direct tuple format: (input_args, expected)
+            input_args, expected = entry
+        elif isinstance(entry, dict):
+            if 'input' not in entry or 'expected' not in entry:
+                raise ValueError(
+                    f"Test case dict missing 'input' or 'expected': {entry}")
+            input_args = entry['input']
+            expected = entry['expected']
+        elif isinstance(entry, list) and len(entry) == 2:
+            input_args, expected = entry
+        else:
+            raise ValueError(f"Invalid test case entry: {entry}")
+
+        # Deserialize inputs and expected output
+        deserialized_input_args = _deserialize_recursive(input_args)
+        deserialized_expected = _deserialize_recursive(expected)
+
+        # Ensure input_args is a tuple for the runner
+        if not isinstance(deserialized_input_args, tuple):
+            # For multiple inputs packed as list, convert to tuple
+            if isinstance(deserialized_input_args, list):
+                deserialized_input_args = tuple(deserialized_input_args)
+            else:  # Single input case
+                deserialized_input_args = (deserialized_input_args,)
+
+        cases.append((deserialized_input_args, deserialized_expected))
+    return cases
+
+
 def _parse_json_cases(data):
     """
     Parse test cases from JSON data, applying deserialization.
