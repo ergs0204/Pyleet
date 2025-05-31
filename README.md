@@ -37,8 +37,8 @@ pip install -e .
 ---
 
 ## Usage
-
 Pyleet supports two main usage modes: **Programmatic (Python code integration)** and **CLI (Command Line Interface)**.
+
 ---
 ## Programmatic Usage
 
