@@ -98,14 +98,6 @@ testcases = [
 ]
 ```
 
-#### 3. List Format
-```python
-testcases = [
-    [[[2, 7, 11, 15], 9], [0, 1]],  # [[input_args], expected_output]
-    [[[3, 2, 4], 6], [1, 2]]
-]
-```
-
 ### Method Selection
 
 Just like the CLI, you can specify which method to test:
