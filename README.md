@@ -38,93 +38,11 @@ pip install -e .
 
 ## Usage
 
-Prepare your **LeetCode solution file** (e.g., `solution.py`) as you would submit it on LeetCode, without modification.
-
-Prepare a **test case file** (e.g., `cases.txt`) containing your test inputs and expected outputs.
-
-### Basic command
-
-```bash
-pyleet solution.py --testcases cases.txt
-# or using the shorthand
-pyleet solution.py -t cases.txt
-```
-
-### Advanced usage with method selection
-
-When your solution class contains multiple methods, you can specify which one to use:
-
-```bash
-# Automatic method selection (default behavior)
-pyleet solution.py --testcases cases.txt
-
-# Explicit method selection
-pyleet solution.py --testcases cases.txt --method twoSum
-pyleet solution.py --testcases cases.txt -m threeSum
-```
-
-### Example test case file format
-
-#### Text format:
-
-```
-(([2, 7, 11, 15], 9), [0, 1])
-(([3, 2, 4], 6), [1, 2])
-(([3, 3], 6), [0, 1])
-```
-
-Each test case in text format follows the same structure:
-- Input arguments in parentheses
-- Expected output after a comma
-
-#### JSON format (recommended):
-
-```json
-[
-  {
-    "input": [[2, 7, 11, 15], 9],
-    "expected": [0, 1]
-  },
-  {
-    "input": [[3, 2, 4], 6],
-    "expected": [1, 2]
-  },
-  {
-    "input": [[3, 3], 6],
-    "expected": [0, 1]
-  }
-]
-```
-
-#### Advanced JSON example with TreeNode:
-
-```json
-[
-  {
-    "description": "Invert binary tree - simple case",
-    "input": [{"TreeNode": [4, 2, 7, 1, 3, 6, 9]}],
-    "expected": {"TreeNode": [4, 7, 2, 9, 6, 3, 1]}
-  },
-  {
-    "description": "Single node tree",
-    "input": [{"TreeNode": [1]}],
-    "expected": {"TreeNode": [1]}
-  }
-]
-```
-
-**JSON format features:**
-- **Structured data**: Each test case is a JSON object with `input` and `expected` fields
-- **Multiple arguments**: Input can be a list of arguments: `"input": [arg1, arg2, arg3]`
-- **Single argument**: For single arguments, wrap in a list: `"input": [arg1]`
-- **Complex data types**: Supports nested structures, objects, and custom classes
-- **Optional descriptions**: Add `"description"` field for test case documentation
-
+Pyleet supports two main usage modes: **Programmatic (Python code integration)** and **CLI (Command Line Interface)**.
 ---
+## Programmatic Usage
 
-## Programmatic Interface
-
-In addition to the CLI, Pyleet provides a programmatic interface that allows you to run tests directly from your Python code. This approach offers better IDE integration, more convenient debugging workflows, and eliminates the need for external test case files.
+Programmatic interface that allows you to run tests directly from your Python code. This approach offers better IDE integration, more convenient debugging workflows, and eliminates the need for external test case files.
 
 ### Basic Programmatic Usage
 
@@ -234,25 +152,110 @@ results = pyleet.run(testcases, method="invertTree")
 pyleet.print_results(results)
 ```
 
-### CLI vs Programmatic Comparison
+### Complete Example
 
-| Feature | CLI Approach | Programmatic Approach |
-|---------|-------------|----------------------|
-| **Test Case Storage** | External files (`.txt`, `.json`) | Defined in Python code |
-| **IDE Integration** | Limited | Full IDE support with autocomplete |
-| **Debugging** | Terminal output only | Integrated with IDE debugger |
-| **Method Selection** | `--method` flag | `method` parameter |
-| **Print Output** | Displayed in terminal | Captured and returned in results |
-| **Automation** | Shell scripts/CI | Python scripts/notebooks |
-| **Best For** | Quick testing, CI/CD | Development, debugging, notebooks |
+See the full example in [`examples/programmatic_usage/`](examples/programmatic_usage/)
+
+---
+## CLI Usage
+
+Prepare your **LeetCode solution file** (e.g., `solution.py`) as you would submit it on LeetCode, without modification.
+
+Prepare a **test case file** (e.g., `cases.txt`) containing your test inputs and expected outputs.
+
+### Basic command
+
+```bash
+pyleet solution.py --testcases cases.txt
+# or using the shorthand
+pyleet solution.py -t cases.txt
+```
+
+### Advanced usage with method selection
+
+When your solution class contains multiple methods, you can specify which one to use:
+
+```bash
+# Automatic method selection (default behavior)
+pyleet solution.py --testcases cases.txt
+
+# Explicit method selection
+pyleet solution.py --testcases cases.txt --method twoSum
+pyleet solution.py --testcases cases.txt -m threeSum
+```
+
+### Example test case file format
+
+#### Text format:
+
+```
+(([2, 7, 11, 15], 9), [0, 1])
+(([3, 2, 4], 6), [1, 2])
+(([3, 3], 6), [0, 1])
+```
+
+Each test case in text format follows the same structure:
+- Input arguments in parentheses
+- Expected output after a comma
+
+#### JSON format (recommended):
+
+```json
+[
+  {
+    "input": [[2, 7, 11, 15], 9],
+    "expected": [0, 1]
+  },
+  {
+    "input": [[3, 2, 4], 6],
+    "expected": [1, 2]
+  },
+  {
+    "input": [[3, 3], 6],
+    "expected": [0, 1]
+  }
+]
+```
+
+#### Advanced JSON example with TreeNode:
+
+```json
+[
+  {
+    "description": "Invert binary tree - simple case",
+    "input": [{"TreeNode": [4, 2, 7, 1, 3, 6, 9]}],
+    "expected": {"TreeNode": [4, 7, 2, 9, 6, 3, 1]}
+  },
+  {
+    "description": "Single node tree",
+    "input": [{"TreeNode": [1]}],
+    "expected": {"TreeNode": [1]}
+  }
+]
+```
+
+**JSON format features:**
+- **Structured data**: Each test case is a JSON object with `input` and `expected` fields
+- **Multiple arguments**: Input can be a list of arguments: `"input": [arg1, arg2, arg3]`
+- **Single argument**: For single arguments, wrap in a list: `"input": [arg1]`
+- **Complex data types**: Supports nested structures, objects, and custom classes
+- **Optional descriptions**: Add `"description"` field for test case documentation
+
+---
+
+## CLI vs Programmatic Comparison
+
+| Feature           | CLI Approach                     | Programmatic Approach           |
+| ----------------- | -------------------------------- | ------------------------------- |
+| Test Case Storage | External files (`.txt`, `.json`) | Python code                     |
+| IDE Integration   | Limited                          | Full autocomplete/debugging     |
+| Debugging         | Terminal only                    | IDE debugger integration        |
+| Method Selection  | `--method` flag                  | `method` parameter              |
+| Output            | Printed in terminal              | Captured in variables           |
+| Automation        | CI / Shell scripts               | Python / Notebooks              |
+| Best For          | Quick tests, CI/CD               | Development, notebooks, IDE use |
 
 ### When to Use Each Approach
-
-**Use CLI when:**
-- Quick testing of solutions
-- CI/CD pipelines
-- Sharing test cases with others
-- Working with large test suites in files
 
 **Use Programmatic Interface when:**
 - Developing and debugging in an IDE
@@ -260,15 +263,12 @@ pyleet.print_results(results)
 - Need tight integration with Python workflows
 - Want to process test results programmatically
 - Prefer keeping tests close to solution code
-
-### Complete Example
-
-See the complete working example in [`examples/programmatic_usage/`](examples/programmatic_usage/) which demonstrates:
-- Multiple test case formats
-- Method selection
-- Print statement capture
-- Error handling
-- Result processing
+-
+**Use CLI when:**
+- Quick testing of solutions
+- CI/CD pipelines
+- Sharing test cases with others
+- Working with large test suites in files
 
 ---
 
