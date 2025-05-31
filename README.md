@@ -255,7 +255,7 @@ Each test case in text format follows the same structure:
 - Need tight integration with Python workflows
 - Want to process test results programmatically
 - Prefer keeping tests close to solution code
--
+
 **Use CLI when:**
 - Quick testing of solutions
 - CI/CD pipelines
@@ -272,7 +272,7 @@ Each test case in text format follows the same structure:
 - Calls your solution method with the inputs
 - Compares the output to the expected result
 - Reports pass/fail status for each test case
-- Any `print()` output from your solution will be shown in  test result, helping with step-by-step debugging
+- Any `print()` output from your solution will be shown in test result, helping with step-by-step debugging
 
 
 ---
@@ -304,12 +304,10 @@ Consider a solution file with multiple LeetCode problems:
 ```python
 class Solution:
     def twoSum(self, nums, target):
-        """LeetCode Problem 1: Two Sum"""
         # Implementation here
         pass
 
     def threeSum(self, nums):
-        """LeetCode Problem 15: Three Sum"""
         # Implementation here
         pass
 ```
