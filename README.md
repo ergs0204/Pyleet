@@ -23,8 +23,11 @@ Pyleet is a Python tool that allows you to **run and test your LeetCode Python s
 ---
 ## Installation
 
-### Using pip (coming soon)
-We'll update this section once Pyleet is available on PyPI.
+### Using pip
+
+```
+pip install pyleet
+```
 
 ### From source (development mode)
 
