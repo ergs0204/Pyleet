@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyleet"
+version = "1.0.0"
+description = "Run and test your LeetCode Python solutions locally"
+readme = "README.md"
+requires-python = ">=3.7"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+    {name = "ergs0204", email = "ergs0204@gmail.com"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+keywords = ["leetcode","pyleet"]
+
+[project.urls]
+Homepage = "https://github.com/ergs0204/pyleet"
+Repository = "https://github.com/ergs0204/pyleet.git"
+Issues = "https://github.com/ergs0204/pyleet/issues"
+
+[project.scripts]
+pyleet = "pyleet.__main__:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
