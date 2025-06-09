@@ -29,7 +29,7 @@ Pyleet is a Python tool that allows you to **run and test your LeetCode Python s
 pip install pyleet
 ```
 
-### From source (development mode)
+### From source
 
 ```bash
 git clone https://github.com/ergs0204/pyleet.git
