@@ -1,6 +1,6 @@
 # Pyleet
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![Python](https://img.shields.io/pypi/pyversions/pyleet)
 ![License](https://img.shields.io/github/license/ergs0204/Pyleet)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ergs0204/Pyleet)
 
