@@ -10,6 +10,9 @@ from .testcase_loader import process_test_cases
 from .runner import run_solution
 from .datastructures import set_user_module
 
+# Global set to track files currently being loaded to prevent infinite recursion
+_loading_files = set()
+
 
 def run(testcases, method=None, solution_path=None):
     """
@@ -54,24 +57,42 @@ def run(testcases, method=None, solution_path=None):
             raise ValueError(
                 "Could not determine solution file path. Please provide solution_path parameter.")
 
-    # Load the user's solution module
-    try:
+    # Check for recursive loading to prevent infinite loops
+    if solution_path in _loading_files:
+        # Instead of raising an error, try to use the already loaded module
         module_name = "user_solution"
-
-        # Remove existing module if it exists to ensure fresh load
         if module_name in sys.modules:
-            del sys.modules[module_name]
+            user_module = sys.modules[module_name]
+            set_user_module(user_module)
+        else:
+            raise ValueError(
+                f"Recursive loading detected for '{solution_path}' but no module found. "
+                f"This usually happens when pyleet.run() is called at module level without "
+                f"'if __name__ == \"__main__\":' guard. Either add the guard or provide "
+                f"solution_path parameter explicitly to avoid auto-detection.")
+    else:
+        # Load the user's solution module
+        try:
+            # Mark this file as currently being loaded
+            _loading_files.add(solution_path)
 
-        spec = importlib.util.spec_from_file_location(
-            module_name, solution_path)
-        user_module = importlib.util.module_from_spec(spec)
-        sys.modules[module_name] = user_module
-        spec.loader.exec_module(user_module)
+            module_name = "user_solution"
 
-        # Set the user module for deserializers to access user-defined classes
-        set_user_module(user_module)
-    except Exception as e:
-        raise ValueError(f"Error loading solution file '{solution_path}': {e}")
+            # Remove existing module if it exists to ensure fresh load
+            if module_name in sys.modules:
+                del sys.modules[module_name]
+
+            # Use a safer module loading approach that doesn't execute all module-level code
+            user_module = _load_module_safely(solution_path, module_name)
+
+            # Set the user module for deserializers to access user-defined classes
+            set_user_module(user_module)
+        except Exception as e:
+            raise ValueError(
+                f"Error loading solution file '{solution_path}': {e}")
+        finally:
+            # Always remove from loading set, even if an error occurred
+            _loading_files.discard(solution_path)
 
     # Process the test cases
     try:
@@ -87,6 +108,59 @@ def run(testcases, method=None, solution_path=None):
         raise ValueError(f"Error running solution: {e}")
 
     return results
+
+
+def _load_module_safely(solution_path, module_name):
+    """
+    Load a module in a way that minimizes the risk of infinite recursion
+    when the module contains pyleet.run() calls at module level.
+
+    This function uses AST parsing to extract only the class and function definitions
+    without executing module-level code that could cause recursion.
+    """
+    import ast
+    import types
+
+    # Read the source code
+    with open(solution_path, 'r', encoding='utf-8') as f:
+        source_code = f.read()
+
+    # Parse the AST
+    try:
+        tree = ast.parse(source_code, filename=solution_path)
+    except SyntaxError as e:
+        raise ValueError(f"Syntax error in solution file: {e}")
+
+    # Create a new module
+    user_module = types.ModuleType(module_name)
+    user_module.__file__ = solution_path
+    sys.modules[module_name] = user_module
+
+    # Execute only class and function definitions, skip module-level calls
+    safe_nodes = []
+    for node in tree.body:
+        if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef,
+                             ast.Import, ast.ImportFrom, ast.Assign)):
+            # Include class definitions, function definitions, imports, and assignments
+            safe_nodes.append(node)
+        elif isinstance(node, ast.Expr) and isinstance(node.value, ast.Call):
+            # Skip expression statements that are function calls (like pyleet.run())
+            continue
+        else:
+            # Include other safe statements like variable assignments
+            safe_nodes.append(node)
+
+    # Create a new AST with only safe nodes
+    safe_tree = ast.Module(body=safe_nodes, type_ignores=[])
+
+    # Compile and execute the safe AST
+    try:
+        code = compile(safe_tree, solution_path, 'exec')
+        exec(code, user_module.__dict__)
+    except Exception as e:
+        raise ValueError(f"Error executing solution file: {e}")
+
+    return user_module
 
 
 def _get_caller_file_path():
