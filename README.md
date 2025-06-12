@@ -149,7 +149,7 @@ pyleet.print_results(results)
 
 ### Complete Example
 
-See the full example in [`examples/programmatic_usage/`](examples/programmatic_usage/)
+See the full example in [`examples/programmatic_usage/`](https://github.com/ergs0204/pyleet/tree/main/examples/programmatic_usage/)
 
 ---
 ## CLI Usage
@@ -369,7 +369,7 @@ Pyleet allows full support for custom data types and complex class structures. Y
 * Use automatic or explicit method selection with type-based heuristics
 * Build reusable and maintainable test cases using JSON-based formats
 
-**For full details**, including setup examples and best practices, see the [Custom Classes Guide](docs/custom_classes_guide.md).
+**For full details**, including setup examples and best practices, see the [Custom Classes Guide](https://github.com/ergs0204/pyleet/blob/main/docs/custom_classes_guide.md).
 
 
 ---
