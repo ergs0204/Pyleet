@@ -8,6 +8,7 @@ import importlib.util
 from pyleet.testcase_loader import load_test_cases
 from pyleet.runner import run_solution
 from pyleet.datastructures import set_user_module
+from pyleet.colors import green, red
 
 
 def main():
@@ -50,13 +51,21 @@ def main():
 
     passed_count = 0
     for idx, result in enumerate(results, 1):
-        status = "PASS" if result["passed"] else "FAIL"
         if result["passed"]:
+            status = green("PASS", bold=True)
             passed_count += 1
+        else:
+            status = red("FAIL", bold=True)
+
         print(f"Test Case {idx}: {status}")
         print(f"  Input: {result['input']}")
         print(f"  Expected: {result['expected']}")
-        print(f"  Actual: {result['actual']}")
+
+        # Color the actual output based on pass/fail status
+        if result["passed"]:
+            print(f"  Actual: {result['actual']}")
+        else:
+            print(f"  Actual: {red(str(result['actual']))}")
 
         # Display captured print output if any
         if result.get("print_output") and result["print_output"].strip():
@@ -68,7 +77,13 @@ def main():
         print()
 
     total = len(results)
-    print(f"Passed {passed_count}/{total} test cases.")
+    if passed_count == total:
+        summary_text = green(
+            f"Passed {str(passed_count)}/{total} test cases.")
+    else:
+        summary_text = red(
+            f"Passed {str(passed_count)}/{total} test cases.")
+    print(summary_text)
 
 
 if __name__ == "__main__":

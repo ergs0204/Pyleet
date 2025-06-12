@@ -9,6 +9,7 @@ import importlib.util
 from .testcase_loader import process_test_cases
 from .runner import run_solution
 from .datastructures import set_user_module
+from .colors import green, red
 
 # Global set to track files currently being loaded to prevent infinite recursion
 _loading_files = set()
@@ -194,13 +195,14 @@ def _get_caller_file_path():
         return None
 
 
-def print_results(results, verbose=True):
+def print_results(results, verbose=True, colored=True):
     """
     Print test results in a formatted way.
 
     Args:
         results (list): List of result dictionaries from run().
         verbose (bool): Whether to show detailed output including inputs, outputs, expected and print.
+        colored (bool): Whether to use colored output for pass/fail status.
     """
     if not results:
         print("No test results to display.")
@@ -210,13 +212,23 @@ def print_results(results, verbose=True):
     total_count = len(results)
 
     for idx, result in enumerate(results, 1):
-        status = "PASS" if result["passed"] else "FAIL"
+        if result["passed"]:
+            status = green("PASS", bold=True) if colored else "PASS"
+        else:
+            status = red("FAIL", bold=True) if colored else "FAIL"
+
         print(f"Test Case {idx}: {status}")
 
         if verbose:
             print(f"  Input: {result['input']}")
             print(f"  Expected: {result['expected']}")
-            print(f"  Actual: {result['actual']}")
+
+            # Color the actual output based on pass/fail status
+            if result["passed"]:
+                actual_text = f"  Actual: {result['actual']}"
+            else:
+                actual_text = f"  Actual: {red(str(result['actual']))}" if colored else f"  Actual: {result['actual']}"
+            print(actual_text)
 
             # Display captured print output if any
             if result.get("print_output") and result["print_output"].strip():
@@ -227,5 +239,14 @@ def print_results(results, verbose=True):
 
         print()
 
-    # Summary
-    print(f"Passed {passed_count}/{total_count} test cases.")
+    # Summary with color
+    if colored:
+        if passed_count == total_count:
+            summary_text = green(
+                f"Passed {str(passed_count)}/{total_count} test cases.")
+        else:
+            summary_text = red(
+                f"Passed {str(passed_count)}/{total_count} test cases.")
+    else:
+        summary_text = f"Passed {passed_count}/{total_count} test cases."
+    print(summary_text)
