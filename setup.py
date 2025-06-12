@@ -3,7 +3,7 @@ from pathlib import Path
 
 setup(
     name="pyleet",
-    version="1.0.1",
+    version="1.0.2",
     description="Run and test your LeetCode Python solutions locally",
     long_description=Path("README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
