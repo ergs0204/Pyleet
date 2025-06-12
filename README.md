@@ -390,7 +390,7 @@ Pyleet allows full support for custom data types and complex class structures. Y
 
 - Optional feature to **fetch test cases automatically from LeetCode**
 - Integration with testing frameworks (pytest, unittest)
-- Support for more data structures.
+- Support for more data structures and nullable types.
 - Run tests in parallel.
 - Record running time.
 - Performance optimizations for large test suites
