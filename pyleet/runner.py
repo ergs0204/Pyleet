@@ -7,6 +7,7 @@ import importlib.util
 import sys
 import io
 import contextlib
+import copy
 from pyleet.datastructures import set_user_module, serialize_object
 
 
@@ -64,6 +65,14 @@ def run_solution(solution_path, test_cases, target_method=None):
         # Capture print output for this specific test case
         print_capture = io.StringIO()
 
+        # Create a deep copy of input args to preserve original state for display
+        original_input_representation = _create_input_representation(
+            deserialized_input_args)
+
+        # Create display representation for expected output
+        original_expected_representation = _create_expected_representation(
+            deserialized_expected)
+
         try:
             # Determine which method to call based on target method or input types
             solution_func = _select_solution_method(
@@ -83,9 +92,10 @@ def run_solution(solution_path, test_cases, target_method=None):
         print_output = print_capture.getvalue()
 
         results.append({
-            "input": deserialized_input_args,  # Store the deserialized input for reporting
-            # Store the deserialized expected for reporting
-            "expected": deserialized_expected,
+            # Store the original input representation for reporting
+            "input": original_input_representation,
+            # Store the original expected representation for reporting
+            "expected": original_expected_representation,
             "actual": actual,
             "passed": passed,
             "print_output": print_output  # Store captured print statements
@@ -138,6 +148,52 @@ def _select_solution_method(solution_methods, input_args, target_method=None):
 
     # Fallback: use the first method
     return next(iter(solution_methods.values()))
+
+
+def _create_input_representation(input_args):
+    """
+    Create a display-friendly representation of input arguments.
+    This preserves the original structure for display purposes by serializing
+    objects back to their JSON-like format.
+
+    Args:
+        input_args (tuple): The deserialized input arguments
+
+    Returns:
+        tuple: A tuple with serialized representations for display
+    """
+    display_args = []
+
+    for arg in input_args:
+        try:
+            # Try to serialize the argument back to its original format
+            serialized = serialize_object(arg)
+            display_args.append(serialized)
+        except Exception:
+            # If serialization fails, use the original argument
+            display_args.append(arg)
+
+    return tuple(display_args)
+
+
+def _create_expected_representation(expected):
+    """
+    Create a display-friendly representation of expected output.
+    This preserves the original structure for display purposes by serializing
+    objects back to their JSON-like format.
+
+    Args:
+        expected: The deserialized expected output
+
+    Returns:
+        The serialized representation for display, or original if serialization fails
+    """
+    try:
+        # Try to serialize the expected output back to its original format
+        return serialize_object(expected)
+    except Exception:
+        # If serialization fails, use the original expected value
+        return expected
 
 
 def _compare_outputs(actual, expected):
