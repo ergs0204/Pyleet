@@ -331,7 +331,7 @@ class Solution:
 ```bash
 pyleet your_solution.py --testcases point_testcases.json
 ```
-[Alternative matrix example]((examples/custom_class/))
+[Alternative matrix example](../examples/custom_class/)
 
 ## Key Points
 
