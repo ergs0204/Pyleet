@@ -19,6 +19,7 @@ Pyleet is a Python tool that allows you to **run and test your LeetCode Python s
 - **Clear Error Reporting**: Provides detailed feedback and comparison for accurate test results.
 - **Debugging Support**: Displays `print()` output from solutions in test results for easier debugging.
 - **Programmatic Interface**: Run tests directly from Python code with `pyleet.run()` for better integration.
+- **Auto Test Case Retrieval**: Automatically fetch test cases from LeetCode with `pyleet.get_testcase()`.
 
 ---
 ## Installation
@@ -147,9 +148,78 @@ results = pyleet.run(testcases, method="invertTree")
 pyleet.print_results(results)
 ```
 
+### Auto-Retrieve Test Cases from LeetCode
+
+Pyleet can automatically fetch test cases directly from LeetCode:
+
+```python
+import pyleet
+
+class Solution:
+    def twoSum(self, nums, target):
+        num_map = {}
+        for i, num in enumerate(nums):
+            complement = target - num
+            if complement in num_map:
+                return [num_map[complement], i]
+            num_map[num] = i
+        return []
+
+# Automatically get test cases from LeetCode
+testcases = pyleet.get_testcase(problem_id=1)  # Two Sum
+results = pyleet.run(testcases)
+pyleet.print_results(results)
+
+# Or use title slug
+testcases = pyleet.get_testcase(title_slug="two-sum")
+results = pyleet.run(testcases)
+```
+
 ### Complete Example
 
-See the full example in [`examples/programmatic_usage/`](https://github.com/ergs0204/pyleet/tree/main/examples/programmatic_usage/)
+See the full example in [`examples/programmatic_usage/`](https://github.com/ergs0204/pyleet/tree/main/examples/programmatic_usage/) and [`examples/testcase_retrieval/`](https://github.com/ergs0204/pyleet/tree/main/examples/testcase_retrieval/)
+
+---
+
+## Auto Test Case Retrieval
+
+Pyleet can automatically retrieve test cases from LeetCode, eliminating the need to manually copy test cases:
+
+### `pyleet.get_testcase()`
+
+```python
+# Get test cases by problem ID
+testcases = pyleet.get_testcase(problem_id=1)
+
+# Get test cases by title slug
+testcases = pyleet.get_testcase(title_slug="two-sum")
+
+# Use with pyleet.run()
+results = pyleet.run(testcases)
+```
+
+**Parameters:**
+- `problem_id` (int, optional): LeetCode problem ID (e.g., 1 for Two Sum)
+- `title_slug` (str, optional): LeetCode problem title slug (e.g., "two-sum")
+- `include_hidden` (bool): Whether to attempt to get hidden test cases (default: False)
+
+**Returns:** List of test cases in Pyleet format `[(input_args, expected_output), ...]`
+
+**Features:**
+- ✅ Automatic test case retrieval from LeetCode
+- ✅ Support for both problem ID and title slug
+- ✅ Seamless integration with `pyleet.run()`
+- ✅ Proper error handling for invalid problems
+- ✅ Works with all LeetCode problem types
+
+**Limitations:**
+- Requires internet connection
+- Only retrieves public example test cases
+- Premium problems require LeetCode Premium subscription
+
+### Examples
+
+See [`examples/testcase_retrieval/`](https://github.com/ergs0204/pyleet/tree/main/examples/testcase_retrieval/) for comprehensive examples including error handling and integration patterns.
 
 ---
 ## CLI Usage
@@ -376,9 +446,10 @@ Pyleet allows full support for custom data types and complex class structures. Y
 
 ## Recent Improvements
 
-- ✅ **NEW: Programmatic Interface** - Run tests directly from Python code with `pyleet.run()` for better IDE integration
-- ✅ **NEW: Built-in ListNode and TreeNode classes** - Zero configuration needed for common LeetCode problems
-- ✅ **NEW: Three usage patterns** - Automatic fallback, explicit import, or custom override
+- ✅ **Testcases fetching** - Fetch testcases with `pyleet.get_testcase()`.
+- ✅ **Programmatic Interface** - Run tests directly from Python code with `pyleet.run()` for better IDE integration
+- ✅ **Built-in ListNode and TreeNode classes** - Zero configuration needed for common LeetCode problems
+- ✅ **Three usage patterns** - Automatic fallback, explicit import, or custom override
 - ✅ **Enhanced custom class support** - Any class structure now supported
 - ✅ **Fixed serialization errors** - No more `val` attribute requirements
 - ✅ **Flexible method selection** - Both automatic selection and explicit method specification via `--method` parameter
@@ -388,12 +459,12 @@ Pyleet allows full support for custom data types and complex class structures. Y
 
 ## Roadmap
 
-- Optional feature to **fetch test cases automatically from LeetCode**
 - Integration with testing frameworks (pytest, unittest)
-- Support for more data structures and nullable types.
+- Support for more data structures.
 - Run tests in parallel.
 - Record running time.
 - Performance optimizations for large test suites
+- Better documentation and examples.
 
 ---
 ## 🤝 Contributing
