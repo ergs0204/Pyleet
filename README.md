@@ -61,7 +61,7 @@ class Solution:
     def twoSum(self, nums, target):
         pass
 
-testcases=pyleet.get_testcases(problem_id=1)
+testcases=pyleet.get_testcase(problem_id=1)
 results = pyleet.run(testcases, method="twoSum")
 pyleet.print_results(results)
 ```
