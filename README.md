@@ -40,7 +40,7 @@ pip install -e .
 
 ---
 ## Quick Start
-
+### CLI
 Run your LeetCode solution against a test case file using the CLI:
 
 ```bash
@@ -51,8 +51,20 @@ For example, if your solution is in `solution.py` and test cases in `cases.txt`:
 ```bash
 pyleet solution.py -t cases.txt
 ```
+### Programmatic
+Pyleet also supports programmatic usage.
+For example
+```python
+import pyleet
 
-Pyleet also supports programmatic usage. See the Detailed Documentation for more.
+class Solution:
+    def twoSum(self, nums, target):
+        pass
+
+testcases=pyleet.get_testcases(problem_id=1)
+results = pyleet.run(testcases, method="twoSum")
+pyleet.print_results(results)
+```
 
 ---
 ## Detailed Documentation
