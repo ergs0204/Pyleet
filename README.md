@@ -19,7 +19,7 @@ Pyleet is a Python tool that allows you to **run and test your LeetCode Python s
 - **Clear Error Reporting**: Provides detailed feedback and comparison for accurate test results.
 - **Debugging Support**: Displays `print()` output from solutions in test results for easier debugging.
 - **Programmatic Interface**: Run tests directly from Python code with `pyleet.run()` for better integration.
-- **Auto Test Case Retrieval**: Automatically fetch test cases from LeetCode with `pyleet.get_testcase()`.
+- **Auto Test Case Retrieval**: Automatically fetch test cases from LeetCode. ([Learn more](https://github.com/ergs0204/pyleet/blob/main/docs/test_case_retrieval.md))
 
 ---
 ## Installation
@@ -39,272 +39,44 @@ pip install -e .
 ```
 
 ---
-
-## Usage
-Pyleet supports two main usage modes: **Programmatic (Python code integration)** and **CLI (Command Line Interface)**.
-
----
-## Programmatic Usage
-
-Programmatic interface that allows you to run tests directly from your Python code. This approach offers better IDE integration, more convenient debugging workflows, and eliminates the need for external test case files.
-
-### Basic Programmatic Usage
-
-```python
-import pyleet
-
-class Solution:
-    def twoSum(self, nums, target):
-        """Find two numbers that add up to target."""
-        num_map = {}
-        for i, num in enumerate(nums):
-            complement = target - num
-            if complement in num_map:
-                return [num_map[complement], i]
-            num_map[num] = i
-        return []
-
-# Define test cases directly in your code
-testcases = [
-    (([2, 7, 11, 15], 9), [0, 1]),
-    (([3, 2, 4], 6), [1, 2]),
-    (([3, 3], 6), [0, 1])
-]
-
-# Run the tests
-results = pyleet.run(testcases)
-pyleet.print_results(results)
-```
-
-### Test Case Formats
-
-The programmatic interface supports multiple test case formats for flexibility:
-
-#### 1. Tuple Format (Recommended for simple cases)
-```python
-testcases = [
-    (([2, 7, 11, 15], 9), [0, 1]),  # ((input_args), expected_output)
-    (([3, 2, 4], 6), [1, 2])
-]
-```
-
-#### 2. Dictionary Format (Recommended for complex cases)
-```python
-testcases = [
-    {
-        "input": [[2, 7, 11, 15], 9],
-        "expected": [0, 1]
-    },
-    {
-        "input": [[3, 2, 4], 6],
-        "expected": [1, 2]
-    }
-]
-```
-
-### Method Selection
-
-Just like the CLI, you can specify which method to test:
-
-```python
-# Automatic method selection (default)
-results = pyleet.run(testcases)
-
-# Explicit method selection
-results = pyleet.run(testcases, method="twoSum")
-```
-
-
-### Using `pyleet.print_results()`
-
-The `print_results()` function provides formatted output with customizable verbosity:
-
-```python
-# Detailed output (default, including inputs, outputs, expected, and print statements)
-pyleet.print_results(results)
-
-# Concise output (only pass/fail status)
-pyleet.print_results(results, verbose=False)
-```
-
-### Working with Custom Classes
-
-The programmatic interface fully supports custom classes and complex data structures:
-
-```python
-import pyleet
-
-# Register custom deserializers if needed
-# (See Custom Classes Guide for details)
-
-testcases = [
-    {
-        "input": [{"TreeNode": [4, 2, 7, 1, 3, 6, 9]}],
-        "expected": {"TreeNode": [4, 7, 2, 9, 6, 3, 1]}
-    }
-]
-
-results = pyleet.run(testcases, method="invertTree")
-pyleet.print_results(results)
-```
-
-### Auto-Retrieve Test Cases from LeetCode
-
-Pyleet can automatically fetch test cases directly from LeetCode:
-
-```python
-import pyleet
-
-class Solution:
-    def twoSum(self, nums, target):
-        num_map = {}
-        for i, num in enumerate(nums):
-            complement = target - num
-            if complement in num_map:
-                return [num_map[complement], i]
-            num_map[num] = i
-        return []
-
-# Automatically get test cases from LeetCode
-testcases = pyleet.get_testcase(problem_id=1)  # Two Sum
-results = pyleet.run(testcases)
-pyleet.print_results(results)
-
-# Or use title slug
-testcases = pyleet.get_testcase(title_slug="two-sum")
-results = pyleet.run(testcases)
-```
-
-### Complete Example
-
-See the full example in [`examples/programmatic_usage/`](https://github.com/ergs0204/pyleet/tree/main/examples/programmatic_usage/) and [`examples/testcase_retrieval/`](https://github.com/ergs0204/pyleet/tree/main/examples/testcase_retrieval/)
-
----
-
-## Auto Test Case Retrieval
-
-Pyleet can automatically retrieve test cases from LeetCode, eliminating the need to manually copy test cases:
-
-### `pyleet.get_testcase()`
-
-```python
-# Get test cases by problem ID
-testcases = pyleet.get_testcase(problem_id=1)
-
-# Get test cases by title slug
-testcases = pyleet.get_testcase(title_slug="two-sum")
-
-# Use with pyleet.run()
-results = pyleet.run(testcases)
-```
-
-**Parameters:**
-- `problem_id` (int, optional): LeetCode problem ID (e.g., 1 for Two Sum)
-- `title_slug` (str, optional): LeetCode problem title slug (e.g., "two-sum")
-- `include_hidden` (bool): Whether to attempt to get hidden test cases (default: False)
-
-**Returns:** List of test cases in Pyleet format `[(input_args, expected_output), ...]`
-
-**Features:**
-- ✅ Automatic test case retrieval from LeetCode
-- ✅ Support for both problem ID and title slug
-- ✅ Seamless integration with `pyleet.run()`
-- ✅ Proper error handling for invalid problems
-- ✅ Works with all LeetCode problem types
-
-**Limitations:**
-- Requires internet connection
-- Only retrieves public example test cases
-- Premium problems require LeetCode Premium subscription
-
-### Examples
-
-See [`examples/testcase_retrieval/`](https://github.com/ergs0204/pyleet/tree/main/examples/testcase_retrieval/) for comprehensive examples including error handling and integration patterns.
-
----
-## CLI Usage
-
-Prepare your **LeetCode solution file** (e.g., `solution.py`) as you would submit it on LeetCode, without modification.
-
-Prepare a **test case file** (e.g., `cases.txt`) containing your test inputs and expected outputs.
-
-### Basic command
+## Quick Start
+### CLI
+Run your LeetCode solution against a test case file using the CLI:
 
 ```bash
-pyleet solution.py --testcases cases.txt
-# or using the shorthand
+pyleet your_solution_file.py --testcases test_cases.txt
+```
+
+For example, if your solution is in `solution.py` and test cases in `cases.txt`:
+```bash
 pyleet solution.py -t cases.txt
 ```
+### Programmatic
+Pyleet also supports programmatic usage.
+For example
+```python
+import pyleet
 
-### Advanced usage with method selection
+class Solution:
+    def twoSum(self, nums, target):
+        pass
 
-When your solution class contains multiple methods, you can specify which one to use:
-
-```bash
-# Automatic method selection (default behavior)
-pyleet solution.py --testcases cases.txt
-
-# Explicit method selection
-pyleet solution.py --testcases cases.txt --method twoSum
-pyleet solution.py --testcases cases.txt -m threeSum
+testcases=pyleet.get_testcase(problem_id=1)
+results = pyleet.run(testcases, method="twoSum")
+pyleet.print_results(results)
 ```
 
-### Example test case file format
+---
+## Detailed Documentation
 
-#### Text format:
+For more in-depth information on specific features and usage, please refer to the following documents:
 
-```
-(([2, 7, 11, 15], 9), [0, 1])
-(([3, 2, 4], 6), [1, 2])
-(([3, 3], 6), [0, 1])
-```
-
-Each test case in text format follows the same structure:
-- Input arguments in parentheses
-- Expected output after a comma
-
-#### JSON format (recommended):
-
-```json
-[
-  {
-    "input": [[2, 7, 11, 15], 9],
-    "expected": [0, 1]
-  },
-  {
-    "input": [[3, 2, 4], 6],
-    "expected": [1, 2]
-  },
-  {
-    "input": [[3, 3], 6],
-    "expected": [0, 1]
-  }
-]
-```
-
-#### Advanced JSON example with TreeNode:
-
-```json
-[
-  {
-    "description": "Invert binary tree - simple case",
-    "input": [{"TreeNode": [4, 2, 7, 1, 3, 6, 9]}],
-    "expected": {"TreeNode": [4, 7, 2, 9, 6, 3, 1]}
-  },
-  {
-    "description": "Single node tree",
-    "input": [{"TreeNode": [1]}],
-    "expected": {"TreeNode": [1]}
-  }
-]
-```
-
-**JSON format features:**
-- **Structured data**: Each test case is a JSON object with `input` and `expected` fields
-- **Multiple arguments**: Input can be a list of arguments: `"input": [arg1, arg2, arg3]`
-- **Single argument**: For single arguments, wrap in a list: `"input": [arg1]`
-- **Complex data types**: Supports nested structures, objects, and custom classes
-- **Optional descriptions**: Add `"description"` field for test case documentation
+- **[Programmatic Usage](https://github.com/ergs0204/pyleet/blob/main/docs/programmatic_usage.md)**: Learn how to integrate Pyleet into your Python scripts and debugging workflows.
+- **[CLI Usage](https://github.com/ergs0204/pyleet/blob/main/docs/cli_usage.md)**: Explore advanced command-line options and test case formats.
+- **[Auto Test Case Retrieval](https://github.com/ergs0204/pyleet/blob/main/docs/test_case_retrieval.md)**: Discover how to fetch test cases directly from LeetCode.
+- **[Method Selection](https://github.com/ergs0204/pyleet/blob/main/docs/method_selection.md)**: Understand how Pyleet handles solutions with multiple methods.
+- **[Custom Class Support](https://github.com/ergs0204/pyleet/blob/main/docs/custom_classes_guide.md)**: Guide for working with custom data structures.
+- **[Dictionary Handling Guide](https://github.com/ergs0204/pyleet/blob/main/docs/dictionary_handling_guide.md)**: Learn how Pyleet handles dictionaries as inputs and outputs.
 
 ---
 
@@ -347,70 +119,6 @@ Each test case in text format follows the same structure:
 - Reports pass/fail status for each test case
 - Any `print()` output from your solution will be shown in test result, helping with step-by-step debugging
 
-
----
-
-## Method Selection
-
-Pyleet provides flexible method selection to handle solution classes with multiple methods. This is particularly useful when working on multiple LeetCode problems in a single file or when your solution class contains helper methods alongside the main solution methods.
-
-### Automatic Method Selection (Default)
-
-By default, Pyleet automatically selects the appropriate method using intelligent heuristics:
-
-1. **Single method**: If only one method exists, it's used automatically
-2. **Type-based matching**: Method names containing input type names are prioritized (e.g., `ListNode` input → `processListNode` method)
-3. **Fallback**: Uses the first available method if no type match is found
-
-### Explicit Method Selection
-
-Use the `--method` (or `-m`) parameter to specify exactly which method should be executed:
-
-```bash
-pyleet solution.py --testcases cases.txt --method methodName
-```
-
-### Example: Multiple Methods in One Solution Class
-
-Consider a solution file with multiple LeetCode problems:
-
-```python
-class Solution:
-    def twoSum(self, nums, target):
-        # Implementation here
-        pass
-
-    def threeSum(self, nums):
-        # Implementation here
-        pass
-```
-
-**Testing different methods:**
-
-```bash
-# Test the twoSum method specifically
-pyleet solution.py --testcases two_sum_cases.json --method twoSum
-
-# Test the threeSum method specifically
-pyleet solution.py --testcases three_sum_cases.json --method threeSum
-```
-
-### When to Use Explicit Method Selection
-
-- **Multiple problem solutions**: When your file contains solutions to different LeetCode problems
-- **Method name ambiguity**: When automatic selection might choose the wrong method
-- **Testing specific implementations**: When you have multiple approaches to the same problem
-- **Helper methods present**: When your class contains both solution methods and helper methods
-
-### Error Handling
-
-If you specify a method that doesn't exist, Pyleet will provide helpful feedback:
-
-```bash
-$ pyleet solution.py --testcases cases.txt --method nonExistentMethod
-Error: Method 'nonExistentMethod' not found. Available methods: ['twoSum', 'threeSum', 'maxSubArray']
-```
-
 ---
 
 ## Built-in and Custom Class Support
@@ -432,15 +140,14 @@ Pyleet includes built-in `ListNode` and `TreeNode` classes that match LeetCode s
 
 ### Custom Class Support
 
+This section provides a brief overview. For full details, see the [Custom Classes Guide](https://github.com/ergs0204/pyleet/blob/main/docs/custom_classes_guide.md).
+
 Pyleet allows full support for custom data types and complex class structures. You can:
 
 * Define and register your own classes
 * Create custom serializers and deserializers
 * Use automatic or explicit method selection with type-based heuristics
 * Build reusable and maintainable test cases using JSON-based formats
-
-**For full details**, including setup examples and best practices, see the [Custom Classes Guide](https://github.com/ergs0204/pyleet/blob/main/docs/custom_classes_guide.md).
-
 
 ---
 
@@ -469,12 +176,8 @@ Pyleet allows full support for custom data types and complex class structures. Y
 ---
 ## 🤝 Contributing
 
-Contributions are welcome! Please open issues or pull requests.
+For detailed information on contributing, see [Contributing](https://github.com/ergs0204/pyleet/blob/main/docs/contributing.md).
 
-1. Fork the repo
-2. Create a feature branch
-3. Commit your changes with clear messages
-4. Push and open a PR.
 ---
 
 ## License
